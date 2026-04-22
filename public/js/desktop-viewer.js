@@ -1,191 +1,144 @@
-let monuments=[]
-let speech=null
+let monuments = [];
+let currentMonument = null;
 
-fetch("/data/monuments.json")
-.then(res=>res.json())
-.then(data=>{
-monuments=data
-showFeatured()
-})
+async function init() {
+await fetchMonuments();
+renderFeatured();
+}
+
+async function fetchMonuments() {
+try {
+const res = await fetch('/data/monuments.json');
+monuments = await res.json();
+} catch (err) {
+console.error('Error loading monuments:', err);
+monuments = [];
+}
+}
+
+function renderFeatured() {
+const featured = monuments.filter(m => m.featured);
+const container = document.getElementById('featuredList');
 
 
-document.getElementById("searchBox").addEventListener("keyup",function(){
+container.innerHTML = featured
+    .map(m => `
+        <div class="monument-card" onclick="loadMonument('${m.name}')">
+            <h3>${m.name}</h3>
+            <p>${m.location}</p>
+            <p class="year">${m.year}</p>
+        </div>
+    `)
+    .join("");
 
-let query=this.value.toLowerCase()
-
-let monument=monuments.find(m=>m.name.toLowerCase().includes(query))
-
-if(monument){
-
-loadMonument(monument)
 
 }
 
-})
+function loadMonument(name) {
+currentMonument = monuments.find(m => m.name === name);
+if (!currentMonument) return;
 
 
-function loadMonument(monument){
+const viewer = document.getElementById('modelViewer');
+const info = document.getElementById('monumentInfo');
+const title = document.getElementById('monumentTitle');
+const sketchfab = document.getElementById('sketchfabViewer');
 
-speechSynthesis.cancel()
+title.textContent = currentMonument.name;
 
-let modelViewer=document.getElementById("modelViewer")
-let sketchfabViewer=document.getElementById("sketchfabViewer")
+if (currentMonument.type === 'glb') {
+    viewer.src = `/models/${currentMonument.model}`;
+    viewer.style.display = 'block';
 
-modelViewer.style.display="none"
-sketchfabViewer.style.display="none"
+    if (sketchfab) {
+        sketchfab.style.display = 'none';
+        sketchfab.innerHTML = "";
+    }
+} 
+else if (currentMonument.type === 'sketchfab') {
+    viewer.style.display = 'none';
 
+    if (sketchfab) {
+        sketchfab.innerHTML = `
+            <iframe
+                title="${currentMonument.name}"
+                frameborder="0"
+                allowfullscreen
+                mozallowfullscreen="true"
+                webkitallowfullscreen="true"
+                allow="autoplay; fullscreen; xr-spatial-tracking"
+                src="${currentMonument.embed}"
+                style="width:100%;height:500px;border-radius:12px;">
+            </iframe>
+        `;
+        sketchfab.style.display = 'block';
+    }
+}
 
-if(monument.type==="glb"){
+info.innerHTML = `
+    <div class="info-section">
+        <h3>Overview</h3>
+        <p>${currentMonument.overview}</p>
+    </div>
 
-modelViewer.src="/models/"+monument.model
-modelViewer.style.display="block"
+    <div class="info-section">
+        <h3>History</h3>
+        <p>${currentMonument.history}</p>
+    </div>
+
+    <div class="info-section">
+        <h3>Architecture</h3>
+        <p>${currentMonument.architecture}</p>
+    </div>
+
+    <div class="info-section">
+        <h3>Key Facts</h3>
+        <ul>
+            ${currentMonument.facts.map(f => `<li>${f}</li>`).join("")}
+        </ul>
+    </div>
+`;
+
 
 }
 
-if(monument.type==="sketchfab"){
+function searchMonument() {
+const query = document
+.getElementById('searchBox')
+.value
+.toLowerCase();
 
-sketchfabViewer.innerHTML=`
-<iframe
-src="${monument.embed}"
-style="width:100%;height:500px;"
-allowfullscreen>
-</iframe>
-`
 
-sketchfabViewer.style.display="block"
+const result = monuments.find(m =>
+    m.name.toLowerCase().includes(query)
+);
 
+if (result) {
+    loadMonument(result.name);
+    document.getElementById('searchBox').value = '';
+} 
+else {
+    alert('Monument not found');
 }
 
 
-let factsHTML=""
+}
 
-if(monument.facts){
-
-monument.facts.forEach(f=>{
-factsHTML+=`<li>${f}</li>`
-})
-
+function launchAR() {
+if (!currentMonument) {
+alert('Please select a monument first');
+return;
 }
 
 
-document.getElementById("info").innerHTML=`
-
-<div class="monument-card">
-
-<h2 class="monument-title">${monument.name}</h2>
-
-<div class="voice-controls">
-
-<button onclick="playNarration()">▶ Play</button>
-<button onclick="pauseNarration()">⏸ Pause</button>
-<button onclick="resumeNarration()">⏯ Resume</button>
-<button onclick="stopNarration()">⏹ Stop</button>
-
-</div>
-
-<div class="monument-meta">
-<span>📍 ${monument.location}</span>
-<span>🏛 Built: ${monument.year}</span>
-</div>
-
-<div class="info-section">
-<h3>Overview</h3>
-<p>${monument.overview}</p>
-</div>
-
-<div class="info-section">
-<h3>History</h3>
-<p>${monument.history}</p>
-</div>
-
-<div class="info-section">
-<h3>Architecture</h3>
-<p>${monument.architecture}</p>
-</div>
-
-<div class="info-section">
-<h3>Interesting Facts</h3>
-<ul>${factsHTML}</ul>
-</div>
-
-</div>
-`
-
+if (currentMonument.type === 'glb') {
+    window.location.href = `/ar.html?model=${currentMonument.model}`;
+} 
+else {
+    alert('AR not available for Sketchfab models');
 }
 
 
-
-function showFeatured(){
-
-let container=document.getElementById("featuredList")
-
-let featured=monuments.filter(m=>m.featured)
-
-featured.forEach(m=>{
-
-let card=document.createElement("div")
-
-card.className="card"
-
-card.innerHTML=`
-
-<h3>${m.name}</h3>
-<p>${m.location}</p>
-
-<button onclick='loadMonument(${JSON.stringify(m)})'>
-Explore
-</button>
-
-`
-
-container.appendChild(card)
-
-})
-
 }
 
-
-
-function playNarration(){
-
-let text=document.getElementById("info").innerText
-
-speech=new SpeechSynthesisUtterance(text)
-
-speech.rate=0.9
-speech.pitch=1
-speech.lang="en-US"
-
-speechSynthesis.cancel()
-speechSynthesis.speak(speech)
-
-}
-
-
-function pauseNarration(){
-
-if(speechSynthesis.speaking){
-
-speechSynthesis.pause()
-
-}
-
-}
-
-
-function resumeNarration(){
-
-if(speechSynthesis.paused){
-
-speechSynthesis.resume()
-
-}
-
-}
-
-
-function stopNarration(){
-
-speechSynthesis.cancel()
-
-}
+document.addEventListener('DOMContentLoaded', init);

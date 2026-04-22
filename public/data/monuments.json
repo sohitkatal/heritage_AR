@@ -1,0 +1,135 @@
+[
+  {
+    "name": "Taj Mahal",
+    "type": "sketchfab",
+  "embed": "https://sketchfab.com/models/7b43e635cbfb47719d5a124302b78579/embed",
+    "overview": "The Taj Mahal is one of the most famous monuments in the world and a UNESCO World Heritage Site.",
+    "history": "Construction began in 1632 and took over 20 years to complete. Around 20,000 craftsmen worked on it.",
+    "architecture": "Built from white marble with intricate carvings, calligraphy, and precious stones.",
+    "facts": [
+      "The Taj Mahal changes color depending on sunlight.",
+      "It is considered one of the Seven Wonders of the World.",
+      "Over 7 million tourists visit annually."
+    ]
+  },
+  {
+    "name": "Colosseum",
+    "type": "glb",
+    "model": "colosseum.glb",
+    "location": "Rome, Italy",
+    "year": "80 AD",
+    "overview": "The Colosseum is the largest ancient amphitheatre ever built.",
+    "history": "Construction began under Emperor Vespasian and was completed by his son Titus.",
+    "architecture": "Could hold up to 50,000 spectators with a complex system of underground tunnels.",
+    "facts": [
+      "It is one of the New Seven Wonders of the World.",
+      "Nearly 2000 years old.",
+      "Over 6 million visitors annually."
+    ]
+  },
+  {
+    "name": "Eiffel Tower",
+    "type": "glb",
+    "model": "eiffeltower.glb",
+    "location": "Paris, France",
+    "year": "1889",
+    "overview": "The Eiffel Tower is a wrought-iron lattice tower and the most famous landmark in Paris.",
+    "history": "Built for the 1889 World's Fair and initially criticized before becoming a global symbol of France.",
+    "architecture": "Stands 330 meters tall and was the tallest man-made structure for 41 years.",
+    "facts": [
+      "Originally meant to be temporary.",
+      "Weighs about 10,000 tons.",
+      "Over 7 million visitors annually."
+    ]
+  },
+  {
+    "name": "Great Wall",
+    "type": "glb",
+    "model": "greatwall.glb",
+    "location": "China",
+    "year": "7th century BC",
+    "overview": "Massive series of fortifications built across northern China to defend against invasions.",
+    "history": "Construction started more than 2,000 years ago and continued through multiple dynasties.",
+    "architecture": "Stretches over 21,000 kilometers with watchtowers, barracks, and fortresses.",
+    "facts": [
+      "The longest wall ever built.",
+      "Visible from space in low orbit.",
+      "Took centuries to complete."
+    ]
+  },
+  {
+    "name": "Big Ben",
+    "type": "glb",
+    "model": "bigben.glb",
+    "location": "London, United Kingdom",
+    "year": "1859",
+    "overview": "The nickname for the Great Bell of the clock at the Palace of Westminster.",
+    "history": "Completed in 1859 and became a symbol of British democracy.",
+    "architecture": "Stands 96 meters tall with Gothic Revival architecture.",
+    "facts": [
+      "One of the most accurate large clocks.",
+      "Weighs over 13 tons.",
+      "Survived bombing in World War II."
+    ]
+  },
+  {
+    "name": "Acropolis",
+    "type": "glb",
+    "model": "acropolis.glb",
+    "location": "Athens, Greece",
+    "year": "447-432 BC",
+    "overview": "Ancient citadel with temples, most notably the Parthenon.",
+    "history": "Built during the reign of Pericles in Classical Greece.",
+    "architecture": "Masterpiece of Classical Greek architecture featuring the iconic Parthenon.",
+    "facts": [
+      "UNESCO World Heritage Site.",
+      "Over 2,400 years old.",
+      "One of the most important surviving buildings of Classical Greece."
+    ]
+  },
+  {
+    "name": "Angkor",
+    "type": "glb",
+    "model": "angkor.glb",
+    "location": "Cambodia",
+    "year": "12th century",
+    "overview": "The largest religious monument in the world, Angkor Wat is a masterpiece.",
+    "history": "Built in the early 12th century as a Hindu temple dedicated to Vishnu.",
+    "architecture": "Surrounded by a massive moat and features intricate stone carvings.",
+    "facts": [
+      "Largest religious monument in the world.",
+      "UNESCO World Heritage Site.",
+      "Symbol of Cambodia appearing on its flag."
+    ]
+  },
+  {
+    "name": "Liberty Island",
+    "type": "glb",
+    "model": "libertysisland.glb",
+    "location": "New York, USA",
+    "year": "1886",
+    "overview": "Colossal neoclassical sculpture representing freedom.",
+    "history": "A gift from France to the United States, designed by Frédéric Auguste Bartholdi.",
+    "architecture": "151 feet tall with iron framework designed by Gustave Eiffel.",
+    "facts": [
+      "One of the most recognizable statues in the world.",
+      "UNESCO World Heritage Site.",
+      "Over 4 million visitors annually."
+    ]
+  },
+  {
+    "name": "Mont Saint-Michel",
+    "type": "glb",
+    "model": "montsaint.glb",
+    "location": "Normandy, France",
+    "year": "8th century",
+    "overview": "Medieval abbey on a rocky tidal island, iconic French landmark.",
+    "history": "Founded in the 8th century, it became a pilgrimage destination.",
+    "architecture": "Romanesque and Gothic architecture perched on a rocky island.",
+    "facts": [
+      "One of Europe's most recognizable landmarks.",
+      "UNESCO World Heritage Site.",
+      "Nearly 1 million visitors annually."
+    ]
+  }
+]

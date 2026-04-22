@@ -2,111 +2,257 @@
 <html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heritage AR - Explore Monuments</title>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/style.css">
 
-<title>Heritage AR</title>
-
-<link rel="stylesheet" href="css/style.css">
-
-<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
-
+    <script type="module"
+        src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js">
+    </script>
 </head>
 
 <body>
 
+    <header class="navbar">
+        <div class="nav-container">
 
-<div id="particles"></div>
+            <div class="logo">🏛️ Heritage AR</div>
 
+            <nav class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#featured">Featured</a>
+                <a href="about.html">About</a>
+               <a href="/ar-select.html" style="color: #38bdf8; font-weight: 700;">📱 AR Mode</a>
+            </nav>
 
-<header>
-
-<div class="logo">Heritage AR</div>
-
-<nav>
-<a href="#">Home</a>
-<a href="#featured">Featured</a>
-<a href="about.html">About</a>
-<a href="ar.html">AR</a>
-</nav>
-
-</header>
+        </div>
+    </header>
 
 
+    <section id="home" class="hero">
+        <div class="hero-content">
 
-<section class="hero">
+            <h1>Explore World Monuments in 3D</h1>
 
-<h1>Explore World Monuments</h1>
+            <p>
+                Experience iconic landmarks with interactive 3D models and 
+                Augmented Reality
+            </p>
 
-<p>Interactive 3D + Augmented Reality learning system</p>
+            <div class="search-container">
+                <input 
+                    type="text"
+                    id="searchBox"
+                    placeholder="Search monument..."
+                    class="search-input"
+                >
 
-<input type="text" id="searchBox" placeholder="Search monument...">
+                <button onclick="searchMonument()" class="search-btn">
+                    Search
+                </button>
+            </div>
 
-</section>
-
-<div id="arInstructions">
-
-<p>
-Move your phone slowly to detect a surface.
-Tap the screen to place the monument.
-</p>
-
-</div>
-
-<section id="viewer">
-
-<div id="viewerContainer">
-
-<model-viewer
-id="modelViewer"
-camera-controls
-auto-rotate
-ar
-ar-modes="webxr scene-viewer quick-look"
-ar-scale="auto"
-environment-image="neutral"
-shadow-intensity="1"
-style="width:100%;height:500px;display:none;">
-
-<button slot="ar-button" class="ar-btn">
-📱 View in AR
-</button>
-
-</model-viewer>
-
-<div id="sketchfabViewer" style="display:none;"></div>
-
-</div>
-
-<div id="info"></div>
-
-</section>
+        </div>
+    </section>
 
 
+    <section id="viewer" class="viewer-section">
 
-<section id="featured">
+        <div class="viewer-wrapper">
 
-<h2>Featured Monuments</h2>
+            <div id="viewerContainer">
 
-<div id="featuredList"></div>
+                <model-viewer
+                    id="modelViewer"
+                    
+                    camera-controls
+                    auto-rotate
+                    ar
+                    ar-modes="webxr scene-viewer quick-look"
+                    environment-image="neutral"
+                    shadow-intensity="1"
+                    style="width:100%; height:500px;">
+                </model-viewer>
+<div id="sketchfabViewer" style="display: none;"></div>
+            </div>
 
-</section>
+
+            <div id="infoPanel" class="info-panel">
+
+                <h2 id="monumentTitle">Select a Monument</h2>
+
+                <div id="monumentInfo"></div>
+
+                <button onclick="launchAR()" class="ar-launch-btn">
+                    📱 Launch AR View
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
 
 
+    <section id="featured" class="featured-section">
 
-<footer>
+        <h2>Featured Monuments</h2>
 
-Heritage AR • Immersive Monument Explorer
+        <div id="featuredList" class="monuments-grid"></div>
 
-</footer>
+    </section>
 
 
-<script src="js/desktop-viewer.js"></script>
-<script src="js/particles.js"></script>
+    <footer class="footer">
+        <p>Heritage AR • Immersive Monument Explorer • 2024</p>
+    </footer>
+
+
+    <script>
+        let allMonuments = [];
+        let currentMonument = null;
+        let modelViewer = null;
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', async () => {
+            modelViewer = document.getElementById('modelViewer');
+            
+            try {
+                const response = await fetch('/data/monuments.json');
+                const data = await response.json();
+                allMonuments = data;
+                console.log('Loaded monuments:', allMonuments.length);
+                
+                // Display featured monuments
+                loadFeaturedMonuments();
+            } catch (error) {
+                console.error('Error loading monuments:', error);
+            }
+        });
+
+        // Load and display featured monuments
+        function loadFeaturedMonuments() {
+            const featured = allMonuments.filter(m => m.featured !== false);
+            const grid = document.getElementById('featuredList');
+            
+            if (featured.length === 0) {
+                grid.innerHTML = '<p style="text-align:center; color:#cbd5e1;">No monuments available</p>';
+                return;
+            }
+
+            grid.innerHTML = featured.map((monument, idx) => `
+                <div class="monument-card" onclick="selectMonument(${idx})">
+                    <h3>${monument.name}</h3>
+                    <p>📍 ${monument.location}</p>
+                    <p class="year">📅 ${monument.year}</p>
+                    <p style="font-size: 12px; color: #cbd5e1; margin-top: 10px;">${monument.overview || 'Historic monument'}</p>
+                </div>
+            `).join('');
+        }
+
+        // Select monument and show 3D
+        function selectMonument(idx) {
+            if (idx >= 0 && idx < allMonuments.length) {
+                currentMonument = allMonuments[idx];
+                displayMonumentInfo(currentMonument);
+                
+                // Scroll to viewer
+                document.getElementById('viewer').scrollIntoView({ behavior: 'smooth' });
+                
+                // Load 3D model if available
+                if (currentMonument.model) {
+                    modelViewer.setAttribute('src', `/models/${currentMonument.model}`);
+                    modelViewer.setAttribute('auto-rotate', '');
+                }
+            }
+        }
+
+        // Display monument information
+        function displayMonumentInfo(monument) {
+            const panel = document.getElementById('infoPanel');
+            document.getElementById('monumentTitle').textContent = monument.name;
+            
+            let html = `
+                <div class="info-section">
+                    <p><strong>📍 ${monument.location}</strong></p>
+                    <p>📅 ${monument.year}</p>
+                </div>
+
+                ${monument.overview ? `
+                <div class="info-section">
+                    <h3>Overview</h3>
+                    <p>${monument.overview}</p>
+                </div>
+                ` : ''}
+
+                ${monument.history ? `
+                <div class="info-section">
+                    <h3>History</h3>
+                    <p>${monument.history}</p>
+                </div>
+                ` : ''}
+
+                ${monument.architecture ? `
+                <div class="info-section">
+                    <h3>Architecture</h3>
+                    <p>${monument.architecture}</p>
+                </div>
+                ` : ''}
+
+                ${monument.facts ? `
+                <div class="info-section">
+                    <h3>Facts</h3>
+                    <ul>
+                        ${monument.facts.map(fact => `<li>${fact}</li>`).join('')}
+                    </ul>
+                </div>
+                ` : ''}
+            `;
+            
+            document.getElementById('monumentInfo').innerHTML = html;
+        }
+
+        // Search functionality
+        function searchMonument() {
+            const query = document.getElementById('searchBox').value.toLowerCase();
+            const filtered = allMonuments.filter(m =>
+                m.name.toLowerCase().includes(query) || 
+                m.location.toLowerCase().includes(query)
+            );
+            
+            const grid = document.getElementById('featuredList');
+            if (filtered.length === 0) {
+                grid.innerHTML = '<p style="text-align:center; color:#cbd5e1;">No results found</p>';
+                return;
+            }
+            
+            grid.innerHTML = filtered.map((monument, idx) => `
+                <div class="monument-card" onclick="selectMonument(${allMonuments.indexOf(monument)})">
+                    <h3>${monument.name}</h3>
+                    <p>📍 ${monument.location}</p>
+                    <p class="year">📅 ${monument.year}</p>
+                    <p style="font-size: 12px; color: #cbd5e1; margin-top: 10px;">${monument.overview || 'Historic monument'}</p>
+                </div>
+            `).join('');
+        }
+
+        // Launch AR
+        function launchAR() {
+            if (!currentMonument) {
+                alert('Please select a monument first');
+                return;
+            }
+            
+            if (!currentMonument.model) {
+                alert('❌ GLB model not available for this monument');
+                return;
+            }
+
+            window.location.href = `/ar?monument=${encodeURIComponent(currentMonument.name)}&model=${encodeURIComponent(currentMonument.model)}`;
+        }
+    </script>
 
 </body>
-
 </html>
