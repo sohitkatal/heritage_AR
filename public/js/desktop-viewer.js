@@ -34,45 +34,41 @@ container.innerHTML = featured
 
 }
 
-function loadMonument(name) {
-currentMonument = monuments.find(m => m.name === name);
-if (!currentMonument) return;
+function loadMonument(name){
 
+currentMonument = monuments.find(m => m.name === name)
 
-const viewer = document.getElementById('modelViewer');
-const info = document.getElementById('monumentInfo');
-const title = document.getElementById('monumentTitle');
-const sketchfab = document.getElementById('sketchfabViewer');
+const viewer = document.getElementById("modelViewer")
+const sketchfab = document.getElementById("sketchfabViewer")
 
-title.textContent = currentMonument.name;
+if(currentMonument.type === "glb"){
 
-if (currentMonument.type === 'glb') {
-    viewer.src = `/models/${currentMonument.model}`;
-    viewer.style.display = 'block';
+viewer.src = "/models/" + currentMonument.model
+viewer.style.display = "block"
+sketchfab.style.display = "none"
 
-    if (sketchfab) {
-        sketchfab.style.display = 'none';
-        sketchfab.innerHTML = "";
-    }
-} 
-else if (currentMonument.type === 'sketchfab') {
-    viewer.style.display = 'none';
+}
 
-    if (sketchfab) {
-        sketchfab.innerHTML = `
-            <iframe
-                title="${currentMonument.name}"
-                frameborder="0"
-                allowfullscreen
-                mozallowfullscreen="true"
-                webkitallowfullscreen="true"
-                allow="autoplay; fullscreen; xr-spatial-tracking"
-                src="${currentMonument.embed}"
-                style="width:100%;height:500px;border-radius:12px;">
-            </iframe>
-        `;
-        sketchfab.style.display = 'block';
-    }
+else if(currentMonument.type === "sketchfab"){
+
+viewer.src = ""
+viewer.style.display = "none"
+
+sketchfab.innerHTML = `
+<iframe
+title="${currentMonument.name}"
+frameborder="0"
+allowfullscreen
+allow="autoplay; fullscreen; xr-spatial-tracking"
+src="${currentMonument.embed}"
+style="width:100%;height:500px;border-radius:12px;">
+</iframe>
+`
+
+sketchfab.style.display = "block"
+
+}
+
 }
 
 info.innerHTML = `
@@ -100,7 +96,7 @@ info.innerHTML = `
 `;
 
 
-}
+
 
 function searchMonument() {
 const query = document

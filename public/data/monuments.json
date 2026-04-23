@@ -3,14 +3,18 @@
     "name": "Taj Mahal",
     "type": "sketchfab",
   "embed": "https://sketchfab.com/models/7b43e635cbfb47719d5a124302b78579/embed",
-    "overview": "The Taj Mahal is one of the most famous monuments in the world and a UNESCO World Heritage Site.",
+    "location": "Agra, India",
+    "year": "1632",
+  
+  "overview": "The Taj Mahal is one of the most famous monuments in the world and a UNESCO World Heritage Site.",
     "history": "Construction began in 1632 and took over 20 years to complete. Around 20,000 craftsmen worked on it.",
     "architecture": "Built from white marble with intricate carvings, calligraphy, and precious stones.",
     "facts": [
       "The Taj Mahal changes color depending on sunlight.",
       "It is considered one of the Seven Wonders of the World.",
       "Over 7 million tourists visit annually."
-    ]
+    ],
+    "featured": true
   },
   {
     "name": "Colosseum",
@@ -59,9 +63,9 @@
   },
   {
     "name": "Big Ben",
-    "type": "glb",
-    "model": "bigben.glb",
-    "location": "London, United Kingdom",
+    "type": "sketchfab",
+  "embed": "https://sketchfab.com/models/40a76cbcae56433093a92ddc6e780169/embed",
+  "location": "London, United Kingdom",
     "year": "1859",
     "overview": "The nickname for the Great Bell of the clock at the Palace of Westminster.",
     "history": "Completed in 1859 and became a symbol of British democracy.",
@@ -70,7 +74,8 @@
       "One of the most accurate large clocks.",
       "Weighs over 13 tons.",
       "Survived bombing in World War II."
-    ]
+    ],
+    "featured": true
   },
   {
     "name": "Acropolis",
